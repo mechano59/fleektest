@@ -1,8 +1,10 @@
+
 # Laravel Docker & Local Setup
 
 This guide will help you set up and run a Laravel application using Docker or locally.
 
 ## 🚀 Getting Started
+
 
 ### 🔹 **Run with Docker**
 
@@ -13,6 +15,8 @@ git clone <your-repo-url>
 cd <your-repo-name>
 
 ```
+### 🔹 **IMPORTANT**
+Before doing anything make sure to make a valid .env file from the .env.example file given in the project directory. 
 
 #### 2️⃣ Build the Docker Image
 
