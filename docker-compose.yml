@@ -1,0 +1,40 @@
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: my-laravel-app
+    ports:
+      - "8080:80" # Host:Container.
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - db
+    environment:
+      DB_CONNECTION: mysql
+      DB_HOST: db # Important: Use service name as hostname for internal Docker network
+      DB_PORT: 3306
+      DB_DATABASE: fleektest01
+      DB_USERNAME: root
+      DB_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+      # Other environment variables for your app
+
+  db:
+    image: mariadb:10.11
+    container_name: mysql-db
+    ports:
+      - "33060:3306"  # Host:Container.  Useful for direct access from your host.
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+      MYSQL_DATABASE: fleektest01 # Optional, but good practice
+    volumes:
+      - db_data:/var/lib/mysql # Persist data across container restarts.
+    healthcheck: # Make sure DB is up!
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD:-root}"]
+      timeout: 20s
+      retries: 10
+
+volumes:
+  db_data:
